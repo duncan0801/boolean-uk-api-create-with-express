@@ -1,22 +1,11 @@
-const express = require("express")
-const Pet = require("./model")
+const express = require("express");
+const petsRouter = express.Router();
+const { createOne, findOnePet, findAllPets } = require("./controller");
 
-const petsRouter = express.Router()
-const { createOnePet } = Pet()
+petsRouter.get("/", findAllPets);
 
-petsRouter.get("/", (req, res) => {
+petsRouter.get("/:id", findOnePet);
 
-})
+petsRouter.post("/", createOne);
 
-petsRouter.get("/:id", (req, res) => {
-    
-})
-
-petsRouter.post("/", (req, res) => {
-    const newPet = req.body;
-	createOnePet(newPet, (resp) => {
-		res.json({ pet: resp });
-	});
-})
-
-module.exports = petsRouter
+module.exports = petsRouter;

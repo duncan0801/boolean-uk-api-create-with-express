@@ -4,16 +4,17 @@ const { createOneBook, showTable, findBook } = Book();
 
 const createNewBook = (req, res) => {
 	const newBook = req.body;
+    const reqKeys = Object.keys(newBook)
 	
     const reqKeyValPairs = Object.entries(newBook)
     const requiredKeys = ["title", "type", "author", "topic", "publicationDate"]
 
     const acceptableRequest = reqKeyValPairs.every((keyValue, index) => {
-        return requiredKeys.includes(keyValue[0]) && typeof keyValue[1] === "string" && Object.keys(newBook).length === [...new Set()]
+        return requiredKeys.includes(keyValue[0]) && typeof keyValue[1] === "string" && reqKeys.length === [...new Set(reqKeys)].length
     })
 
     if(!acceptableRequest) {
-        console.log("error")
+        console.log("error, didn't pass check")
     }
 
     console.log(reqKeyValPairs)

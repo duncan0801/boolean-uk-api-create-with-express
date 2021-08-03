@@ -1,19 +1,12 @@
 const express = require("express");
-const Book = require("./model");
+const { createNewBook, viewAllBooks, viewOneBook } = require("./controller")
 
 const booksRouter = express.Router();
 
-const { createOneBook } = Book();
+booksRouter.get("/", viewAllBooks);
 
-booksRouter.get("/", (req, res) => {});
+booksRouter.get("/:id", viewOneBook);
 
-booksRouter.get("/:id", (req, res) => {});
-
-booksRouter.post("/", (req, res) => {
-	const newBook = req.body;
-	createOneBook(newBook, (resp) => {
-		res.json({ book: resp });
-	});
-});
+booksRouter.post("/", createNewBook);
 
 module.exports = booksRouter;

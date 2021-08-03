@@ -2,7 +2,7 @@ const dbClient = require("../../utils/database");
 
 function Book() {
 	function createTable() {
-		const sql = `
+		const sql = ` 
         CREATE TABLE IF NOT EXISTS books (
           id              SERIAL        PRIMARY KEY,
           title           VARCHAR(255)   NOT NULL,
@@ -10,18 +10,34 @@ function Book() {
           author          VARCHAR(255)   NOT NULL,
           topic           VARCHAR(255)   NOT NULL,
           publicationDate DATE           NOT NULL
-        );
+        )
+		;
       `;
 		dbClient.query(sql).then((result) => {});
 	}
-	// function showTable() {
-	//     const sql = `
-	//         SELECT * FROM books
-	//     `
-	//     dbClient.query(sql).then(result => {
-	//         console.log(result.rows)
-	//     })
-	// }
+
+	function showTable(callback) {
+		const sql = `
+	        SELECT * FROM books;
+	    `;
+		dbClient.query(sql).then((result) => {
+			callback(result.rows)
+			console.log("here is the result from the server??? ", result);
+		});
+	}
+
+	function findBook(requestedId, callback) {
+		const sql = `
+			SELECT * FROM books
+			WHERE id = ($1);
+		`
+		dbClient.query(sql, [requestedId]).then((result)=>{
+			callback(result.rows[0])
+		}).catch((error)=>{
+			console.log("Houston we have a problem ", error)
+		})
+	}
+
 	function createOneBook(newBook, callback) {
 		const { title, type, author, topic, publicationDate } = newBook;
 
@@ -46,6 +62,8 @@ function Book() {
 
 	return {
 		createOneBook,
+		showTable,
+		findBook
 	};
 }
 
